@@ -1,0 +1,144 @@
+body {
+  background-color: #15151e;
+}
+
+.team-card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
+  box-sizing: border-box;
+  padding: 16px;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 90vw;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.team-car-img {
+  height: 120px;
+  width: 100%;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+
+.teams-page main h1 {
+  text-align: center;
+  font-family: "Titillium Web", sans-serif;
+  font-weight: bold;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  color: white;
+}
+
+.teams-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  margin: 20px 0;
+  gap: 15px;
+}
+
+.team-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.team-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.team-card-title-group h4 {
+  font-family: "Titillium Web", sans-serif;
+  color: white;
+  margin: 0 0 4px 0;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.car-badge {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.7);
+  display: inline-block;
+}
+
+.flag-img {
+  height: 24px;
+  width: auto;
+  border-radius: 2px;
+  object-fit: contain;
+  display: block;
+}
+
+.team-card-details {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-label {
+  font-size: 0.70rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.drivers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.driver-tag, .engine-text {
+  font-size: 0.9rem;
+  color: white;
+  font-family: "Titillium Web", sans-serif;
+}
+
+.team-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 15px 35px rgba(225, 6, 0, 0.2);
+  border-color: rgba(225, 6, 0, 0.5);
+  z-index: 1;
+}
+
+@media (min-width: 450px) {
+  .team-card {
+    width: 45vw;
+  }
+}
+
+@media (min-width: 768px) {
+  .team-card {
+    width: 25vw;
+  }
+}
+
+@media (min-width: 1000px) {
+  .team-card {
+    width: 16.66vw;
+  }
+}

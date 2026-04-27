@@ -1,0 +1,273 @@
+/* Container y Título */
+.gallery-page {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: calc(100vh - 150px);
+  font-family: "Titillium Web", sans-serif;
+}
+
+.gallery-title {
+  text-align: center;
+  color: white;
+  margin-bottom: 24px;
+  font-weight: 800;
+  font-size: 2.2rem;
+}
+
+/* Filtros */
+.gallery-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.gallery-filter-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 20px;
+  border-radius: 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.gallery-filter-btn:hover {
+  background: rgba(225, 6, 0, 0.2);
+  color: white;
+  border-color: rgba(225, 6, 0, 0.5);
+}
+
+.gallery-filter-btn.active {
+  background: #e10600;
+  color: white;
+  border-color: #e10600;
+  box-shadow: 0 4px 12px rgba(225, 6, 0, 0.4);
+}
+
+/* Red de Masonería (Masonry Layout) */
+.masonry-grid {
+  column-count: 1;
+  column-gap: 16px;
+  padding-bottom: 40px;
+}
+
+@media (min-width: 600px) {
+  .masonry-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 900px) {
+  .masonry-grid {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1200px) {
+  .masonry-grid {
+    column-count: 4;
+  }
+}
+
+.masonry-item {
+  break-inside: avoid;
+  /* Previene que una imagen se rompa entre columnas */
+  margin-bottom: 16px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.02);
+  transform: translateZ(0);
+  /* Forzar aceleración de hardware para transiciones suaves */
+}
+
+.masonry-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Efecto Premium Hover en Imágenes */
+.masonry-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.masonry-item:hover img {
+  transform: scale(1.05);
+}
+
+.masonry-item:hover .masonry-overlay {
+  opacity: 1;
+}
+
+.masonry-overlay-title {
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  transform: translateY(10px);
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.masonry-item:hover .masonry-overlay-title {
+  transform: translateY(0);
+}
+
+.masonry-zoom-icon {
+  color: #e10600;
+  font-size: 1.8rem;
+  margin-top: 12px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) 0.1s;
+}
+
+.masonry-item:hover .masonry-zoom-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+/* Lightbox Modal Ocupando Toda La Pantalla */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 10, 15, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lightbox-content img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  user-select: none;
+}
+
+.lightbox-caption {
+  margin-top: 16px;
+  color: white;
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-weight: 600;
+}
+
+.lightbox-counter {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+}
+
+/* Controles Lightbox */
+.lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  font-size: 1.5rem;
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+}
+
+.lightbox-close:hover {
+  background: #e10600;
+  transform: scale(1.1);
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  font-size: 2rem;
+  color: white;
+  width: 60px;
+  height: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.lightbox-nav.prev {
+  left: 0;
+  border-radius: 0 12px 12px 0;
+}
+
+.lightbox-nav.next {
+  right: 0;
+  border-radius: 12px 0 0 12px;
+}
+
+.lightbox-nav:hover {
+  background: rgba(225, 6, 0, 0.8);
+}
+
+@media (max-width: 768px) {
+  .lightbox-nav {
+    width: 40px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+}

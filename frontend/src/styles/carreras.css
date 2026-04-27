@@ -1,0 +1,239 @@
+.race-results-page {
+  background-color: #15151e;
+  min-height: calc(100vh - 56px);
+  padding-bottom: 60px;
+  color: white;
+  font-family: "Titillium Web", sans-serif;
+}
+
+.race-results-page main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.race-results-page h1 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: white;
+}
+
+.race-results-page h2 {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  color: white;
+  border-bottom: 2px solid #e10600;
+  padding-bottom: 8px;
+}
+
+/* Selector de año */
+.year-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+
+.year-selector label {
+  font-weight: 600;
+  color: white;
+}
+
+.year-selector select {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-family: "Titillium Web", sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+  min-width: 150px;
+}
+
+.year-selector select:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.year-selector select:focus {
+  border-color: #e10600;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.year-selector select option {
+  color: #000;
+  background: #fff;
+}
+
+/* Mensajes de error y carga */
+.error-message {
+  background: rgba(225, 6, 0, 0.2);
+  border: 1px solid #e10600;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  color: #ff6b6b;
+  text-align: center;
+}
+
+.loading {
+  text-align: center;
+  padding: 24px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+}
+
+.no-races,
+.no-results {
+  text-align: center;
+  padding: 24px;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+}
+
+/* Grid de carreras */
+.races-list {
+  margin-bottom: 32px;
+}
+
+.races-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.race-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.race-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(225, 6, 0, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.race-card.active {
+  background: rgba(225, 6, 0, 0.15);
+  border-color: #e10600;
+}
+
+.race-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.race-card-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.race-date {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.race-card-info {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.race-card-info p {
+  margin: 4px 0;
+}
+
+/* Tabla de resultados */
+.race-results-section {
+  margin-top: 32px;
+}
+
+.results-table-container {
+  overflow-x: auto;
+  margin-top: 16px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.results-table thead {
+  background: rgba(225, 6, 0, 0.2);
+}
+
+.results-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: white;
+  border-bottom: 2px solid #e10600;
+}
+
+.results-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.results-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.position-cell {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: white;
+}
+
+.driver-cell {
+  font-weight: 500;
+}
+
+.driver-code {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+
+.team-cell {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .races-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .race-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .results-table-container {
+    font-size: 0.9rem;
+  }
+
+  .results-table th,
+  .results-table td {
+    padding: 8px 12px;
+  }
+}
+
