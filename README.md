@@ -80,6 +80,25 @@ npm run dev
 
 ---
 
+### 🛠️ Guía de Inicio Rápido y Pruebas (API)
+
+**1. Configuración Inicial:**
+*   Crear archivo `.env` (basado en `.env.example`) con la URI de MongoDB.
+*   Ejecutar `npm run seed` para poblar la base de datos y crear el usuario administrador.
+*   Iniciar con `npm run dev`.
+
+**2. Credenciales de Administrador:**
+*   **Email:** `admin@f1.com` | **Password:** `Qwerty123`
+
+**3. Flujo de prueba recomendado (Thunder Client/Postman):**
+1.  **Login:** `POST /api/auth/login` con las credenciales de arriba para obtener el **JWT Token**.
+2.  **Autorización:** Configurar el token como `Bearer Token` en las peticiones protegidas.
+3.  **Productos:** `GET /api/products` (Público) para ver el catálogo cargado.
+4.  **Pedidos:** `POST /api/orders` (Requiere Token) para verificar la lógica de stock y cálculo de totales.
+5.  **Gestión:** `POST /api/products` (Solo Admin) enviando un `Form-data` con imagen para probar la integración con Supabase.
+
+---
+
 ## 📜 Scripts disponibles
 
 | Comando | Descripción |
