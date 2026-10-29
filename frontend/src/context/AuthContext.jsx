@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
     const [token, setToken] = useState(null)
     const [loading, setLoading] = useState(true)
 
-    const API_URL = import.meta.env.VITE_API_BASE_URL
+    const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api"
 
     // Al montar, restaurar la sesión desde localStorage
     useEffect(() => {

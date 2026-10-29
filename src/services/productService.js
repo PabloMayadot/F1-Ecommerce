@@ -1,13 +1,19 @@
 import mongoose from "mongoose"
 import { checkModelExist } from "../helpers/checkExist.js"
+import Category from "../models/categoryModel.js"
 import Product from "../models/productModel.js"
 import { escapeRegex, stripMongoOperators } from "../utils/sanitizeInput.js"
 
 export const createProductService = async (productData) => {
     const safe = stripMongoOperators(productData)
-    await checkModelExist(Product, { name: safe.name }, false, 400, `El producto "${safe.name}" ya existe`)
+    const trimmedName = typeof safe.name === "string" ? safe.name.trim() : safe.name
+    await checkModelExist(Product, { name: trimmedName, isActive: true }, false, 400, `El producto "${trimmedName}" ya existe`)
 
-    const newProduct = new Product(safe)
+    if (safe.category) {
+        await checkModelExist(Category, { _id: safe.category, isActive: true }, true, 404, "La categoría seleccionada no existe")
+    }
+
+    const newProduct = new Product({ ...safe, name: trimmedName, isActive: true })
     return await newProduct.save()
 }
 
@@ -37,19 +43,23 @@ export const getAllProductService = async (query) => {
 }
 
 export const getProductByIdService = async (id) => {
-    await checkModelExist(Product, { _id: id }, true, 404, "Producto no encontrado")
+    await checkModelExist(Product, { _id: id, isActive: true }, true, 404, "Producto no encontrado")
     return await Product.findById(id).populate("category")
 }
 
 export const updateProductService = async (id, productData) => {
-    await checkModelExist(Product, { _id: id }, true, 404, "Producto no encontrado")
+    await checkModelExist(Product, { _id: id, isActive: true }, true, 404, "Producto no encontrado")
 
     const safe = stripMongoOperators(productData)
+    if (safe.category) {
+        await checkModelExist(Category, { _id: safe.category, isActive: true }, true, 404, "La categoría seleccionada no existe")
+    }
+
     return await Product.findByIdAndUpdate(id, safe, { new: true, runValidators: true })
 }
 
 export const deleteProductService = async (id) => {
-    await checkModelExist(Product, { _id: id }, true, 404, "Producto no encontrado")
+    await checkModelExist(Product, { _id: id, isActive: true }, true, 404, "Producto no encontrado")
 
     // Soft delete: desactivamos el producto en lugar de eliminarlo físicamente
     const product = await Product.findByIdAndUpdate(id, { isActive: false }, { new: true })

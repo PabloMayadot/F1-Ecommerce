@@ -8,26 +8,43 @@ export const getAllCategoryService = async () => {
 }
 
 export const getCategoryByIdService = async (id) => {
-    return await checkModelExist(Category, { _id: id }, true, 404, "Categoría no encontrada")
+    return await checkModelExist(Category, { _id: id, isActive: true }, true, 404, "Categoría no encontrada")
 }
 
 export const createCategoryService = async (categoryData) => {
     const safe = stripMongoOperators(categoryData)
-    await checkModelExist(Category, { name: safe.name }, false, 400, "La categoría ya existe")
+    const normalizedName = typeof safe.name === "string" ? safe.name.trim().toLowerCase() : safe.name
 
-    const newCategory = new Category(safe)
+    const existing = await Category.findOne({ name: normalizedName })
+    if (existing) {
+        if (existing.isActive) {
+            const error = new Error("La categoría ya existe")
+            error.statusCode = 400
+            throw error
+        }
+        existing.isActive = true
+        if (safe.description !== undefined) {
+            existing.description = safe.description
+        }
+        return await existing.save()
+    }
+
+    const newCategory = new Category({ ...safe, name: normalizedName, isActive: true })
     return await newCategory.save()
 }
 
 export const updateCategoryService = async (id, categoryData) => {
-    await checkModelExist(Category, { _id: id }, true, 404, "Categoría no encontrada")
+    await checkModelExist(Category, { _id: id, isActive: true }, true, 404, "Categoría no encontrada")
 
     const safe = stripMongoOperators(categoryData)
+    if (typeof safe.name === "string") {
+        safe.name = safe.name.trim().toLowerCase()
+    }
     return await Category.findByIdAndUpdate(id, safe, { new: true, runValidators: true })
 }
 
 export const deleteCategoryService = async (id) => {
-    await checkModelExist(Category, { _id: id }, true, 404, "Categoría no encontrada")
+    await checkModelExist(Category, { _id: id, isActive: true }, true, 404, "Categoría no encontrada")
 
     // Soft delete: desactivar la categoría sin eliminarla físicamente
     const deletedCategory = await Category.findByIdAndUpdate(id, { isActive: false }, { new: true })

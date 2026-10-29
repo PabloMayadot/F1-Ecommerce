@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_BASE_URL
+const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api"
 
 const getAuthHeaders = () => {
     const token = localStorage.getItem("f1_token")
@@ -13,8 +13,15 @@ const getAuthHeaders = () => {
  */
 const fetchJSON = async (url, options = {}) => {
     const res = await fetch(url, options)
-    const data = await res.json()
-    if (!data.success) throw new Error(data.message)
+    let data
+    try {
+        data = await res.json()
+    } catch {
+        throw new Error(`Error del servidor (${res.status})`)
+    }
+    if (!res.ok || !data.success) {
+        throw new Error(data?.message || `Error en la solicitud (${res.status})`)
+    }
     return data.data
 }
 
@@ -30,16 +37,14 @@ export const getProducts = (query = {}) => {
 
 export const getProductById = (id) => fetchJSON(`${API_URL}/products/${id}`)
 
-export const createProduct = (formData) =>
-    fetch(`${API_URL}/products`, {
+export const createProduct = (formData) => {
+    const token = localStorage.getItem("f1_token")
+    return fetchJSON(`${API_URL}/products`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${localStorage.getItem("f1_token")}` },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: formData,
-    }).then(async (res) => {
-        const data = await res.json()
-        if (!data.success) throw new Error(data.message)
-        return data.data
     })
+}
 
 export const deleteProduct = (id) =>
     fetchJSON(`${API_URL}/products/${id}`, {

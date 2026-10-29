@@ -10,6 +10,11 @@ const ALLOWED_IMAGE_MIMES = new Set([
 ])
 
 export const uploadImageToSupabase = async (file, folder) => {
+    if (!supabase) {
+        const err = new Error("El almacenamiento de imágenes (Supabase) no está configurado en el servidor")
+        err.statusCode = 503
+        throw err
+    }
     if (!file || !file.buffer) {
         const err = new Error("Archivo inválido")
         err.statusCode = 400

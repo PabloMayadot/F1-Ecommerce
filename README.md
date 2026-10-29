@@ -66,7 +66,6 @@ npm install
 npm run seed
 ```
 
-> [!IMPORTANT]
 > Al ejecutar `npm run seed`, se creará automáticamente una cuenta de administrador para pruebas locales:
 > * **Email:** `admin@f1.com`
 > * **Password:** `Qwerty123`

@@ -47,7 +47,18 @@ export default function Cart() {
                                     <div className="quantity-selector">
                                         <button onClick={() => updateQuantity(item._id, item.quantity - 1)}>−</button>
                                         <span>{item.quantity}</span>
-                                        <button onClick={() => updateQuantity(item._id, item.quantity + 1)}>+</button>
+                                        <button
+                                            onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                                            disabled={
+                                                item.stock !== null &&
+                                                item.stock !== undefined &&
+                                                item.stock !== "" &&
+                                                Number.isFinite(Number(item.stock)) &&
+                                                item.quantity >= Number(item.stock)
+                                            }
+                                        >
+                                            +
+                                        </button>
                                     </div>
 
                                     <p className="cart-item-subtotal">

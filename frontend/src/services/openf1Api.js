@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_OPENF1_API_URL
+const API_BASE_URL = import.meta.env.VITE_OPENF1_API_URL || "https://api.openf1.org/v1"
 
 const fetchOpenF1 = async (endpoint) => {
     const response = await fetch(`${API_BASE_URL}${endpoint}`)

@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import Product from "../models/productModel.js"
 import Order from "../models/orderModel.js"
 
@@ -5,7 +6,7 @@ const MAX_LINE_ITEMS = 50
 const MAX_QTY_PER_LINE = 99
 
 export const createOrderService = async (userId, orderData) => {
-    if (!Array.isArray(orderData.items) || orderData.items.length === 0) {
+    if (!orderData || !Array.isArray(orderData.items) || orderData.items.length === 0) {
         const error = new Error("La orden debe incluir al menos un producto")
         error.statusCode = 400
         throw error
@@ -28,22 +29,39 @@ export const createOrderService = async (userId, orderData) => {
         throw error
     }
 
-    let subtotal = 0
-    const itemsProcesados = []
-
-    // Validar stock y calcular precios desde la base de datos (no confiamos en el frontend)
+    // Consolidar cantidades si el mismo productId viene repetido en el array
+    const groupedQuantities = new Map()
     for (const item of orderData.items) {
+        if (!item?.productId || typeof item.productId !== "string" || !mongoose.Types.ObjectId.isValid(item.productId)) {
+            const error = new Error("El formato del ID de producto no es válido")
+            error.statusCode = 400
+            throw error
+        }
         const qty = Number(item.quantity)
         if (!Number.isInteger(qty) || qty < 1 || qty > MAX_QTY_PER_LINE) {
             const error = new Error(`Cantidad inválida para un producto (permitido: 1-${MAX_QTY_PER_LINE})`)
             error.statusCode = 400
             throw error
         }
+        const key = new mongoose.Types.ObjectId(item.productId).toHexString()
+        const totalQty = (groupedQuantities.get(key) || 0) + qty
+        if (totalQty > MAX_QTY_PER_LINE) {
+            const error = new Error(`Cantidad inválida para un producto (permitido: 1-${MAX_QTY_PER_LINE})`)
+            error.statusCode = 400
+            throw error
+        }
+        groupedQuantities.set(key, totalQty)
+    }
 
-        const product = await Product.findById(item.productId)
+    let subtotal = 0
+    const itemsProcesados = []
+
+    // Validar stock y calcular precios desde la base de datos (no confiamos en el frontend)
+    for (const [productId, qty] of groupedQuantities.entries()) {
+        const product = await Product.findById(productId)
 
         if (!product) {
-            const error = new Error(`Producto con ID ${item.productId} no encontrado`)
+            const error = new Error(`Producto con ID ${productId} no encontrado`)
             error.statusCode = 404
             throw error
         }
@@ -115,6 +133,12 @@ export const getOrdersByUserService = async (userId) => {
 }
 
 export const getOrderByIdService = async (orderId) => {
+    if (!mongoose.Types.ObjectId.isValid(orderId)) {
+        const error = new Error("El formato del ID de la orden no es válido")
+        error.statusCode = 400
+        throw error
+    }
+
     const order = await Order.findById(orderId).populate("user", "name email")
 
     if (!order) {

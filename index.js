@@ -9,6 +9,7 @@ import categoryRoute from "./src/routes/categoryRoute.js"
 import userRoute from "./src/routes/userRoute.js"
 import authRoute from "./src/routes/authRoute.js"
 import orderRoute from "./src/routes/orderRoute.js"
+import { handleError } from "./src/utils/errorHandler.js"
 
 const app = express()
 
@@ -44,12 +45,7 @@ app.use(cors({
 
 app.use(express.json())
 
-app.use(express.urlencoded({extended: true}))
-
-connectDB()
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`)
-})
+app.use(express.urlencoded({ extended: true }))
 
 // Rutas
 app.get("/", (req, res) => {
@@ -71,7 +67,18 @@ app.use((err, req, res, next) => {
     if (err && err.message === "Tipo de imagen no permitido") {
         return res.status(400).json({ success: false, message: err.message })
     }
-    next(err)
+    return handleError(err, res)
 })
+
+connectDB()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Servidor corriendo en el puerto ${PORT}`)
+        })
+    })
+    .catch((err) => {
+        console.error("Fallo crítico al conectar con MongoDB:", err.message)
+        process.exit(1)
+    })
 
 export default app

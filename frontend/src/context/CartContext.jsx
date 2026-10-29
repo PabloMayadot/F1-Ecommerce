@@ -20,6 +20,12 @@ const cargarCarritoGuardado = () => {
     }
 }
 
+const obtenerStockMaximo = (stock) => {
+    if (stock === null || stock === undefined || stock === "") return Infinity
+    const parsed = Number(stock)
+    return Number.isFinite(parsed) ? parsed : Infinity
+}
+
 export function CartProvider({ children }) {
     const [items, setItems] = useState(cargarCarritoGuardado)
 
@@ -29,16 +35,20 @@ export function CartProvider({ children }) {
     }, [items])
 
     const addToCart = (product, quantity = 1) => {
+        const maxStock = obtenerStockMaximo(product.stock)
+        if (maxStock <= 0) return
+
         setItems((prev) => {
             const existente = prev.find((item) => item._id === product._id)
             if (existente) {
+                const nuevaCantidad = Math.min(existente.quantity + quantity, maxStock)
                 return prev.map((item) =>
                     item._id === product._id
-                        ? { ...item, quantity: item.quantity + quantity }
+                        ? { ...item, stock: product.stock, quantity: nuevaCantidad }
                         : item
                 )
             }
-            return [...prev, { ...product, quantity }]
+            return [...prev, { ...product, quantity: Math.min(quantity, maxStock) }]
         })
     }
 
@@ -48,7 +58,11 @@ export function CartProvider({ children }) {
             return
         }
         setItems((prev) =>
-            prev.map((item) => item._id === productId ? { ...item, quantity } : item)
+            prev.map((item) => {
+                if (item._id !== productId) return item
+                const maxStock = obtenerStockMaximo(item.stock)
+                return { ...item, quantity: Math.min(quantity, maxStock) }
+            })
         )
     }
 
